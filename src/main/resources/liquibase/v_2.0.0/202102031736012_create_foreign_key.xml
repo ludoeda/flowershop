@@ -1,0 +1,23 @@
+<databaseChangeLog
+        logicalFilePath="202102031756000_create_foreign_key.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+<changeSet id="202102031756000" author="alexander" runOnChange="true">
+        <sql>
+<!--            alter table buckets-->
+<!--            add foreign key (flowerId) references flowers(id),-->
+<!--            add foreign key (orderId) references orders(id);-->
+<!--            alter table orders-->
+<!--            foreign key (userId) references users(id);-->
+            insert into flowers (name, price, quontity) values
+            ('rose', 100, 300), ('lavender', 75, 250), ('chamomile', 30, 400),
+            ('lily', 80, 200), ('tulip', 60, 100), ('narcissus', 65, 350);
+        </sql>
+        <comment>
+            Добавление внешних ключей в таблицы buckets и orders
+        </comment>
+    </changeSet>
+
+</databaseChangeLog>

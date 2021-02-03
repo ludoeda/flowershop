@@ -1,0 +1,22 @@
+<databaseChangeLog
+        logicalFilePath="202102031752000_create_table_buckets.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="202102031752000" author="alexander" runOnChange="true">
+        <sql>
+            create table if not exist buckets (
+            id serial primary key,
+            quontity int,
+            price int,
+            flowerId int,
+            orderId int,
+            );
+        </sql>
+        <comment>
+            Создание таблицы buckets
+        </comment>
+    </changeSet>
+
+</databaseChangeLog>

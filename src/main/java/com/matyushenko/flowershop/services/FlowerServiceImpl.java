@@ -1,39 +1,39 @@
 package com.matyushenko.flowershop.services;
 
 import com.matyushenko.flowershop.model.Flower;
-import com.matyushenko.flowershop.repository.FlowerRepository;
+import com.matyushenko.flowershop.repository.FlowerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FlowerServiceImpl implements FlowerService{
     @Autowired
-    private FlowerRepository flowerRepository;
+    private FlowerDAO flowerDAO;
 
     @Override
+    @Transactional
     public List<Flower> getAllFlowers() {
-        return flowerRepository.findAll();
+        return flowerDAO.getAllFlowers();
     }
 
     @Override
+    @Transactional
     public Flower getFlower(int flowerId) {
-        Flower flower = null;
-        Optional<Flower> optionalFlower = flowerRepository.findById(flowerId);
-        if (optionalFlower.isPresent())
-            flower = optionalFlower.get();
-        return flower;
+        return flowerDAO.getFlower(flowerId);
     }
 
     @Override
+    @Transactional
     public int getPrice(int flowerId) {
-        return getFlower(flowerId).getPrice();
+        return flowerDAO.getPrice(flowerId);
     }
 
     @Override
-    public int getQuontity(int flowerId) {
-        return getFlower(flowerId).getQuontity();
+    @Transactional
+    public int getQuantity(int flowerId) {
+        return flowerDAO.getQuantity(flowerId);
     }
 }

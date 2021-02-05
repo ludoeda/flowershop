@@ -28,18 +28,18 @@ public class Flower {
     private int price;
 
     @Column(name = "quontity")
-    private int quontity;
+    private int quantity;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "buckets",
-    joinColumns = @JoinColumn(name = "flowerId"),
-    inverseJoinColumns = @JoinColumn(name = "orderId"))
-    private List<Order> orders;
-
-    public void addOrderToFlower(Order order) {
-        if (orders == null)
-            orders = new ArrayList<>();
-        orders.add(order);
-    }
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "buckets",
+//    joinColumns = @JoinColumn(name = "flowerId"),
+//    inverseJoinColumns = @JoinColumn(name = "orderId"))
+//    private List<Order> orders;
+//
+//    public void addOrderToFlower(Order order) {
+//        if (orders == null)
+//            orders = new ArrayList<>();
+//        orders.add(order);
+//    }
 
 }

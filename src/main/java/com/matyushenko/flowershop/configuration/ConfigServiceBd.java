@@ -1,103 +1,79 @@
 package com.matyushenko.flowershop.configuration;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages = "com.matyushenko.flowershop")
-@EnableWebMvc
 @EnableTransactionManagement
-@RequiredArgsConstructor
-public class ConfigServiceBd{
-
-    private ServiceBdProperty serviceBdProperty;
+@PropertySource(value = "classpath:db.properties")
+public class ConfigServiceBd {
+    @Autowired
+    private Environment environment;
 
 
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
-        internalResourceViewResolver.setPrefix("/WEB-INF/view/");
+        internalResourceViewResolver.setPrefix("/WEB-INF/jsp/");
         internalResourceViewResolver.setSuffix(".jsp");
         return internalResourceViewResolver;
     }
 
     @Bean
     public DataSource dataSource() {
-        HikariConfig config = new HikariConfig();
-            config.setDriverClassName(serviceBdProperty.getDriver());
-            config.setJdbcUrl(serviceBdProperty.getUrl());
-            config.setUsername(serviceBdProperty.getUsername());
-            config.setPassword(serviceBdProperty.getPassword());
-        return new HikariDataSource(config);
-    }
-//    @Bean
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        LocalContainerEntityManagerFactoryBean em
-//                = new LocalContainerEntityManagerFactoryBean();
-//        em.setDataSource(dataSource());
-//        em.setPackagesToScan("com.matyushenko.flowershop.model");
-//        Properties properties = new Properties();
-//        properties.setProperty("hibernate.dialcet","org.hibernate.dialect.PostgreSQLDialect");
-//        properties.setProperty("hibernate.show_sql","true");
-//        em.setJpaProperties(properties);
-//        return em;
-//    }
-//    @Bean
-//    public PlatformTransactionManager transactionManager() {
-//        JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-//        return transactionManager;
-//    }
-//    @Bean
-//    public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
-//        return entityManagerFactory.createEntityManager();
-//    }
-//    @Bean
-//    public JpaVendorAdapter jpaVendorAdapter() {
-//        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-//        hibernateJpaVendorAdapter.setShowSql(false);
-//        hibernateJpaVendorAdapter.setGenerateDdl(true);
-//        hibernateJpaVendorAdapter.setDatabase(Database.H2);
-//        return hibernateJpaVendorAdapter;
-//    }
-
-    @Bean
-    @Primary
-    public LocalContainerEntityManagerFactoryBean EntityManager() {
-        LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
-        entityManager.setDataSource(dataSource());
-        entityManager.setPackagesToScan("com.matyushenko.flowershop.model");
-
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        entityManager.setJpaVendorAdapter(vendorAdapter);
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        entityManager.setJpaPropertyMap(properties);
-        return entityManager;
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
+        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
+        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
+        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+//        dataSource.setInitialSize(1);
+//        dataSource.setValidationQuery("Select 1 From dual");
+//        dataSource.setRemoveAbandonedTimeout(30);
+//        dataSource.setTestWhileIdle(true);
+        return dataSource;
     }
 
     @Bean
-    @Primary
-    public PlatformTransactionManager serviceTransactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(EntityManager().getObject());
-        return transactionManager;
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setPackagesToScan("com.matyushenko.flowershop.model");
+        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter());
+        entityManagerFactoryBean.setJpaDialect(new HibernateJpaDialect());
+        entityManagerFactoryBean.setJpaProperties(hibernateProperties());
+        return entityManagerFactoryBean;
+    }
+
+    private HibernateJpaVendorAdapter vendorAdapter() {
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+        hibernateJpaVendorAdapter.setDatabase(Database.POSTGRESQL);
+        hibernateJpaVendorAdapter.setGenerateDdl(true);
+        return hibernateJpaVendorAdapter;
+    }
+
+    @Bean
+    public JpaTransactionManager transactionManager() {
+        return new JpaTransactionManager(
+                entityManagerFactory().getObject());
+    }
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+        return properties;
     }
 }

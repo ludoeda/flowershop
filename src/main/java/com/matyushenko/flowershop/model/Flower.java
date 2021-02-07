@@ -14,21 +14,21 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Entity
-@Table(schema = "flowershop", name = "flowers")
+@Table(name = "flowers")
 public class Flower {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "price")
-    private int price;
+    private Integer price;
 
-    @Column(name = "quontity")
-    private int quantity;
+    @Column(name = "quantity")
+    private Integer quantity;
 
 //    @ManyToMany(cascade = CascadeType.ALL)
 //    @JoinTable(name = "buckets",

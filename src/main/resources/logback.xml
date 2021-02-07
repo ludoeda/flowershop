@@ -6,7 +6,7 @@
             <pattern>%date{ISO8601} |-%-5level %class{1}:%line - %msg%n</pattern>
         </encoder>
     </appender>
-    <logger name="com.matyushenko.flowershop" level="debug"/>
+    <logger name="flowershop" level="debug"/>
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>

@@ -1,4 +1,4 @@
-package com.matyushenko.flowershop.model;
+package com.accenture.flowershop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

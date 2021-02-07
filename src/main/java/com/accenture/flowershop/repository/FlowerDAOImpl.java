@@ -1,6 +1,6 @@
-package com.matyushenko.flowershop.repository;
+package com.accenture.flowershop.repository;
 
-import com.matyushenko.flowershop.model.Flower;
+import com.accenture.flowershop.model.Flower;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

@@ -1,10 +1,10 @@
-package com.matyushenko.flowershop.repository;
+package com.accenture.flowershop.services;
 
-import com.matyushenko.flowershop.model.Flower;
+import com.accenture.flowershop.model.Flower;
 
 import java.util.List;
 
-public interface FlowerDAO {
+public interface FlowerService {
 
     List<Flower> getAllFlowers();
 

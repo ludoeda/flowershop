@@ -1,7 +1,7 @@
-package com.matyushenko.flowershop.services;
+package com.accenture.flowershop.services;
 
-import com.matyushenko.flowershop.model.Flower;
-import com.matyushenko.flowershop.repository.FlowerDAO;
+import com.accenture.flowershop.repository.FlowerDAO;
+import com.accenture.flowershop.model.Flower;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

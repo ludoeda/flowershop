@@ -1,6 +1,6 @@
-package com.matyushenko.flowershop.services;
+package com.accenture.flowershop.services;
 
-import com.matyushenko.flowershop.model.Order;
+import com.accenture.flowershop.model.Order;
 
 import java.util.List;
 

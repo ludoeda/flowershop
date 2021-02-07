@@ -1,4 +1,4 @@
-package com.matyushenko.flowershop.configuration;
+package com.accenture.flowershop.configuration;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.flywaydb.core.Flyway;
@@ -18,13 +18,12 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "com.matyushenko.flowershop")
+@ComponentScan(basePackages = "com.accenture.flowershop")
 @EnableTransactionManagement
 @PropertySource(value = "classpath:dbh2.properties")
-public class ConfigServiceBd {
+public class ApplicationContextConfig {
     @Autowired
     private Environment environment;
-
 
     @Bean
     public ViewResolver viewResolver() {
@@ -41,10 +40,10 @@ public class ConfigServiceBd {
         dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
         dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
-        dataSource.setInitialSize(1);
-        dataSource.setValidationQuery("Select 1 From dual");
-        dataSource.setRemoveAbandonedTimeout(30);
-        dataSource.setTestWhileIdle(true);
+//        dataSource.setInitialSize(1);
+//        dataSource.setValidationQuery("Select 1 From dual");
+//        dataSource.setRemoveAbandonedTimeout(30);
+//        dataSource.setTestWhileIdle(true);
         return dataSource;
     }
 
@@ -53,7 +52,7 @@ public class ConfigServiceBd {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.matyushenko.flowershop.model");
+        entityManagerFactoryBean.setPackagesToScan("com.accenture.flowershop.model");
         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter());
         entityManagerFactoryBean.setJpaDialect(new HibernateJpaDialect());
         entityManagerFactoryBean.setJpaProperties(hibernateProperties());
@@ -62,7 +61,7 @@ public class ConfigServiceBd {
 
     private HibernateJpaVendorAdapter vendorAdapter() {
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-        hibernateJpaVendorAdapter.setDatabase(Database.POSTGRESQL);
+        hibernateJpaVendorAdapter.setDatabase(Database.H2);
         hibernateJpaVendorAdapter.setGenerateDdl(true);
         return hibernateJpaVendorAdapter;
     }

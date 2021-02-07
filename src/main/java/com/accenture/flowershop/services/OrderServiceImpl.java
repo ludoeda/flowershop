@@ -1,7 +1,6 @@
-package com.matyushenko.flowershop.services;
+package com.accenture.flowershop.services;
 
-import com.matyushenko.flowershop.model.Flower;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.accenture.flowershop.model.Flower;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
